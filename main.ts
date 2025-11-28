@@ -20,7 +20,7 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     drawMenu()
 })
 // ---------- GRID UTILS ----------
-function gridToPixel(c: number, r: number) {
+function gridToPixel (c: number, r: number) {
     // compute locally so no hidden globals required
     totalW = gridCols * CELL
     totalH = gridRows * CELL
@@ -35,11 +35,11 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
     if (currentApp != App.Menu) {
         destroyAllKinds()
         currentApp = App.Menu
-        drawMenu()
+drawMenu()
     }
 })
 // ---------- MAZE: generation (recursive backtracker) ----------
-function initMazeGrid() {
+function initMazeGrid () {
     mazeGrid = []
     for (let r = 0; r <= gridRows - 1; r++) {
         mazeGrid[r] = []
@@ -49,10 +49,10 @@ function initMazeGrid() {
     }
 }
 // ---------- SHOOTER ----------
-function startShooter() {
+function startShooter () {
     destroyAllKinds()
     currentApp = App.Shooter
-    scene.setBackgroundColor(7)
+scene.setBackgroundColor(7)
     info.setScore(0)
     info.setLife(3)
     shooterEnemyHP = 3
@@ -108,7 +108,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             return
         } else {
             currentApp = App.ComingSoon
-            return
+return
         }
     }
     // SHOOTER shooting
@@ -120,7 +120,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             1 1 1
             . 1 .
         `, shooterPlayer, 160, 0)
-        return
+return
     }
     // MAZE SHOOTER shooting (player shoots forward)
     if (currentApp == App.ShooterMaze) {
@@ -130,10 +130,10 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             1 1 1
             . 1 .
         `, mazeShooterPlayer, 0, -120)
-        return
+return
     }
 })
-function spawnMazeSprites() {
+function spawnMazeSprites () {
     for (let w of mazeWalls) {
         w.destroy()
     }
@@ -159,12 +159,12 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     drawMenu()
 })
 // ---------- SHOOTER MAZE (ADDED) ----------
-function startMazeShooter() {
+function startMazeShooter () {
     destroyAllKinds()
     currentApp = App.ShooterMaze
-    scene.setBackgroundColor(6)
+scene.setBackgroundColor(6)
     info.setScore(0)
-    info.setLife(5)
+    info.setLife(18)
     mazeShooterEnemyHP = 3
     carveMaze()
     spawnMazeSprites()
@@ -214,7 +214,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Player, function (proj, pl) 
     }
 })
 // ---------- HELPERS ----------
-function destroyAllKinds() {
+function destroyAllKinds () {
     sprites.destroyAllSpritesOfKind(SpriteKind.Player)
     sprites.destroyAllSpritesOfKind(SpriteKind.Enemy)
     sprites.destroyAllSpritesOfKind(SpriteKind.Projectile)
@@ -222,7 +222,7 @@ function destroyAllKinds() {
     sprites.destroyAllSpritesOfKind(SpriteKind.Wall)
     sprites.destroyAllSpritesOfKind(SpriteKind.EnemyBullet)
 }
-function carveMaze() {
+function carveMaze () {
     let stack: number[][] = []
     initMazeGrid()
     rr = 1
@@ -252,6 +252,8 @@ function carveMaze() {
             ncLocal = nn[1]
             // remove wall between
             // remove wall between
+            // remove wall between
+            // remove wall between
             mazeGrid[(t + nrLocal) >> 1][(e + ncLocal) >> 1] = 1
             mazeGrid[nrLocal][ncLocal] = 1
             stack.push([nrLocal, ncLocal])
@@ -269,11 +271,11 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     if (mazeTimer < mazeBest) {
         mazeBest = mazeTimer
         settings.writeNumber("mazeBest", mazeBest)
-        game.splash("NEW RECORD!")
+game.splash("NEW RECORD!")
     }
     destroyAllKinds()
     currentApp = App.Menu
-    drawMenu()
+drawMenu()
 })
 // projectile hits enemy (player bullet)
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (proj, en) {
@@ -307,15 +309,15 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (proj, en) {
             game.splash("YOU WIN!")
             destroyAllKinds()
             currentApp = App.Menu
-            drawMenu()
+drawMenu()
         }
     }
 })
 // ---------- START MAZE ----------
-function startMaze() {
+function startMaze () {
     destroyAllKinds()
     currentApp = App.Maze
-    scene.setBackgroundColor(6)
+scene.setBackgroundColor(6)
     mazeTimer = 0
     carveMaze()
     spawnMazeSprites()
@@ -335,6 +337,8 @@ function startMaze() {
     exitC = gridCols - 2
     // make sure it's open
     // make sure it's open
+    // make sure it's open
+    // make sure it's open
     mazeGrid[exitR][exitC] = 1
     exitPos = gridToPixel(exitC, exitR)
     mazeGoal = sprites.create(img`
@@ -349,11 +353,11 @@ function startMaze() {
     prevY = mazePlayer.y
 }
 // ---------- MENU DRAW ----------
-function drawMenu() {
+function drawMenu () {
     scene.setBackgroundColor(9)
     screen.fill(9)
     screen.printCenter("MEWY OS", 10, 1)
-    for (let i = 0; i <= menuItems.length - 1; i++) {
+for (let i = 0; i <= menuItems.length - 1; i++) {
         yy = 40 + i * 18
         if (i == selected) {
             // red selection rectangle (stroke)
@@ -362,7 +366,7 @@ function drawMenu() {
         screen.print(menuItems[i], 30, yy, 1)
     }
     screen.printCenter("A = Select   B = Back", 110, 1)
-    // ONLY print BEST MAZE if it's a valid number (prevents "undefined")
+// ONLY print BEST MAZE if it's a valid number (prevents "undefined")
     if (mazeBest != null && !(isNaN(mazeBest))) {
         screen.printCenter("BEST MAZE: " + mazeBest + "s", 100, 1)
     }
@@ -388,16 +392,11 @@ let speed = 0
 let mag = 0
 let dy = 0
 let dx = 0
-let yy = 0
 let exitPos: number[] = []
 let exitC = 0
 let exitR = 0
 let startPos: number[] = []
-let ncLocal = 0
-let nrLocal = 0
 let nn: number[] = []
-let e = 0
-let t = 0
 let topLocal: number[] = []
 let cc = 0
 let rr = 0
@@ -421,29 +420,34 @@ let selected = 0
 let gridRows = 0
 let gridCols = 0
 let CELL = 0
-let wall = null
-let pos: number[] = []
-let nc = 0
-let nr = 0
-let n: number[] = []
-let d = 0
-let s = 0
-let top: number[] = []
-let sc = 0
-// some temporaries used in functions (kept to avoid missing-name errors)
-let sr = 0
-let mazeShooterEnemyHP = 0
-let mazeShooterEnemy: Sprite = null
-// maze-shooter globals (ADDED)
-let mazeShooterPlayer: Sprite = null
-let shooterEnemyHP = 0
-let shooterEnemy: Sprite = null
+let menuItems: string[] = []
+let mazePlayer: Sprite = null
+let mazeGoal: Sprite = null
+let mazeTimer = 0
 // shooter globals (existing)
 let shooterPlayer: Sprite = null
-let mazeTimer = 0
-let mazeGoal: Sprite = null
-let mazePlayer: Sprite = null
-let menuItems: string[] = []
+let shooterEnemy: Sprite = null
+let shooterEnemyHP = 0
+// maze-shooter globals (ADDED)
+let mazeShooterPlayer: Sprite = null
+let mazeShooterEnemy: Sprite = null
+let mazeShooterEnemyHP = 0
+// some temporaries used in functions (kept to avoid missing-name errors)
+let sr = 0
+let sc = 0
+let top: number[] = []
+let s = 0
+let d = 0
+let n: number[] = []
+let nr = 0
+let nc = 0
+let pos: number[] = []
+let wall = null
+let t = 0
+let e = 0
+let nrLocal = 0
+let ncLocal = 0
+let yy = 0
 CELL = 6
 let MAZE_CELLS_X = 11
 let MAZE_CELLS_Y = 7
@@ -506,10 +510,10 @@ sprites.destroy(mySprite)
 logo.destroy()
 // menu setup (kept/updated)
 menuItems = [
-    "Shooter",
-    "Maze",
-    "Maze Shooter",
-    "Coming Soon"
+"Shooter",
+"Maze",
+"Maze Shooter",
+"Coming Soon"
 ]
 currentApp = App.Menu
 drawMenu()
@@ -635,8 +639,8 @@ game.onUpdateInterval(100, function () {
     projs = sprites.allOfKind(SpriteKind.Projectile)
     for (let v of projs) {
         let j = v.image.width
-        let k = v.image.height
-        for (let yy2 = 0; yy2 <= k - 1; yy2++) {
+let k = v.image.height
+for (let yy2 = 0; yy2 <= k - 1; yy2++) {
             for (let xx = 0; xx <= j - 1; xx++) {
                 if (v.image.getPixel(xx, yy2) != 0) {
                     nonzero += 1
